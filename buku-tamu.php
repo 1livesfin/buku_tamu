@@ -78,9 +78,12 @@ if (isset($_POST['simpan'])) {
         <td><?= $tamu['no_hp'] ?></td>
         <td><?= $tamu['bertemu'] ?></td>
         <td><?= $tamu['kepentingan'] ?></td>
-        <td><button class="btn btn-success" type="button">Ubah</button>
-            <button class="btn btn-danger" type="button">Hapus</button>
-        </td>
+<td>
+    <a class="btn btn-success" href="edit-tamu.php?id=<?= $tamu['id_tamu'] ?>">Ubah</a>
+    <a class="btn btn-danger" href="hapus-tamu.php?id=<?= $tamu['id_tamu'] ?>" 
+       onclick="return confirm('Yakin ingin hapus?')">Hapus</a>
+</td>
+
     </tr>
     <?php endforeach; ?>
 </tbody>
