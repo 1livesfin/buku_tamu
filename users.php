@@ -1,6 +1,13 @@
 <?php
 include_once('templates/header.php');
 include_once('function.php');
+if (isset($_POST['ganti_password'])) {
+    if (ganti_password($_POST) > 0) {
+        echo '<div class="alert alert-success" role="alert">Password berhasil diubah!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Password gagal diubah!</div>';
+    }
+}
 ?>
 
 <!-- Begin Page Content -->
@@ -19,7 +26,7 @@ include_once('function.php');
 <?php
 // jika ada tombol simpan
 if (isset($_POST['simpan'])) {
-    if (tambah_tamu($_POST) > 0) {
+    if (tambah_user($_POST) > 0) {
 ?>
         <div class="alert alert-success" role="alert">
             Data berhasil disimpan!
@@ -72,6 +79,9 @@ if (isset($_POST['simpan'])) {
             <td><?= $user['username']; ?></td>
             <td><?= $user['user_role']; ?></td>
             <td>
+                <button type="button" class="btn btn-info btn-icon-split" data-toggle="modal" data-target="#gantiPassword" data-id="<?= $user['id_user'] ?>">
+                    <span class="text">Ganti Password</span>
+                </button>
                 <a class="btn btn-success" href="edit-user.php?id=<?= $user['id_user'] ?>">Ubah</a>
                 <a onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')" class="btn btn-danger"
                     href="hapus-user.php?id=<?= $user['id_user'] ?>">Hapus</a>
@@ -79,33 +89,49 @@ if (isset($_POST['simpan'])) {
         </tr>
     <?php endforeach; ?>
 </tbody>
-<?php
-include_once('templates/footer.php');
-?>
 
-<div class="modal-body">
-    <form method="post" action="">
-        <input type="hidden" name="id_user" id="id_user" value="<?= $kodeuser ?>">
-        <div class="form-group row">
+
+<!-- Modal Tambah User -->
+<div class="modal fade" id="tambahModal" tabindex="-1" aria-labelledby="tambahModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tambahModalLabel">Tambah Data User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="">
+        <div class="modal-body">
+          <input type="hidden" name="id_user" id="id_user" value="<?= $kodeuser ?>">
+          <div class="form-group row">
             <label for="username" class="col-sm-3 col-form-label">Username</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" id="username" name="username">
+              <input type="text" class="form-control" id="username" name="username">
             </div>
-        </div>
-        <div class="form-group row">
+          </div>
+          <div class="form-group row">
             <label for="password" class="col-sm-3 col-form-label">Password</label>
             <div class="col-sm-8">
-                <input type="password" class="form-control" id="password" name="password">
+              <input type="password" class="form-control" id="password" name="password">
             </div>
-        </div>
-        <div class="form-group row">
+          </div>
+          <div class="form-group row">
             <label for="user_role" class="col-sm-3 col-form-label">User Role</label>
             <div class="col-sm-8">
-                <select class="form-control" id="user_role" name="user_role">
-                    <option value="admin">Administrator</option>
-                    <option value="operator">Operator</option>
-                </select>
+              <select class="form-control" id="user_role" name="user_role">
+                <option value="admin">Administrator</option>
+                <option value="operator">Operator</option>
+              </select>
             </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+          <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
         </div>
     </form>
+  </div>
 </div>
+
+<?php include_once('templates/footer.php'); ?>

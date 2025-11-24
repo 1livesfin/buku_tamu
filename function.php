@@ -56,15 +56,49 @@ function ubah_tamu($data)
     return mysqli_affected_rows($koneksi);
 }
 
-// function hapus data tamu
-function hapus_tamu($id) {
+function tambah_user($data){
     global $koneksi;
 
-    $query = "DELETE FROM buku_tamu WHERE id_tamu = '$id'";
+    $kode       = htmlspecialchars($data["id_user"]);
+    $username   = htmlspecialchars($data["username"]);
+    $password   = htmlspecialchars($data["password"]);
+    $user_role  = htmlspecialchars($data["user_role"]);
+
+    // Enkripsi password dengan password_hash
+    $password_hash = password_hash($password,PASSWORD_DEFAULT);
+
+    $query = "INSERT INTO users VALUES ('$kode','$username','$password_hash','$user_role')";
 
     mysqli_query($koneksi, $query);
 
     return mysqli_affected_rows($koneksi);
 }
+
+// function hapus data user
+function hapus_user($id) {
+    global $koneksi;
+
+    $query = "DELETE FROM users WHERE id_user = '$id'";
+
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+}
+// function ganti password user
+function ganti_password($data) {
+    global $koneksi;
+
+    $kode           = htmlspecialchars($data["id_user"]);
+    $password       = htmlspecialchars($data["password"]);
+    $password_hash  = password_hash($password,PASSWORD_DEFAULT);
+
+    $query = "UPDATE users SET
+                password        = '$password_hash'
+              WHERE id_user     = '$kode'";
+
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+} 
 
 ?>
